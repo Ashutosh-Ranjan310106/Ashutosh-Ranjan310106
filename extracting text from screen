@@ -1,0 +1,44 @@
+import cv2
+import numpy as np
+import pyautogui
+from PIL import ImageGrab,Image
+from time import sleep
+import pyttsx3
+import pytesseract
+from pytesseract import image_to_string
+from pynput.mouse import Controller
+
+computer=pyttsx3.init()       
+input('click enter')
+start=pyautogui.position()
+input('click enter')
+end=pyautogui.position()
+cordinate=start[0:2]+end[0:2]
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+tex='sadsfdssd\ndsfsdfdsfsd\nasdfds\n'
+mouse=Controller()
+
+def stringtrimer(s1,s2):
+    test=s1[-11:-1:]
+    try :
+        start=s2.index(test)
+    except:
+        start=0-len(test)
+    return s2[start+len(test)::]
+sleep(2)
+while True:
+    cap=ImageGrab.grab(bbox=cordinate)
+    cap= np.array(cap)
+    print(cap)
+    cap=cv2.cvtColor(cap, cv2.COLOR_BGR2GRAY)
+    text=pytesseract.image_to_string(cap)
+    text=stringtrimer(tex,text))
+    #print(text)
+    computer.say(text)
+    computer.runAndWait()
+    if cv2.waitKey(1)==27:
+        break
+    tex=text
+    mouse.scroll(0,-5)
+    sleep(1)
+cv2.destroyAllWindows()
